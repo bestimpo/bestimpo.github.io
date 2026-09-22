@@ -1,0 +1,119 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Pulled from the Bestimpo logo. */
+  --color-brand-50: #eff8ff;
+  --color-brand-100: #dbeefe;
+  --color-brand-200: #bfe2fe;
+  --color-brand-300: #93cffd;
+  --color-brand-400: #60b4fa;
+  --color-brand-500: #3b95f6;
+  --color-brand-600: #2e7cb8;
+  --color-brand-700: #235f8f;
+  --color-brand-800: #1b4a6b;
+  --color-brand-900: #14344b;
+  --color-brand-950: #0b1b2b;
+
+  --color-accent-400: #ffc94d;
+  --color-accent-500: #ffb020;
+  --color-accent-600: #e0930a;
+
+  --color-neon-400: #22e3d3;
+  --color-neon-500: #0fc8ba;
+
+  --shadow-glow: 0 0 0 1px rgb(59 149 246 / 0.25), 0 18px 45px -20px rgb(59 149 246 / 0.55);
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-brand-950 font-sans text-brand-50 antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-400/40 text-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+}
+
+/* @utility, not a .class in @layer components: Tailwind v4 only lets @apply
+   reference registered utilities, and .btn-primary below applies it. */
+@utility btn {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-300 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl;
+  }
+
+  .btn-primary {
+    @apply btn bg-linear-to-r from-brand-500 to-neon-500 text-brand-950 shadow-glow hover:from-brand-400 hover:to-neon-400 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/15 bg-white/5 text-brand-50 hover:border-brand-400/60 hover:bg-white/10;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-white/10 bg-brand-950/60 px-4 py-3 text-sm text-brand-50 placeholder:text-brand-300/50 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 focus:outline-none;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold tracking-wide text-brand-200 uppercase;
+  }
+
+  .glow-grid {
+    background-image:
+      radial-gradient(circle at 15% 15%, rgb(59 149 246 / 0.35), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgb(15 200 186 / 0.25), transparent 42%),
+      linear-gradient(to bottom, rgb(11 27 43 / 0), rgb(11 27 43 / 1) 85%);
+  }
+}
