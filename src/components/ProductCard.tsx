@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ShoppingCart, Star } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
-import { assetUrl, formatPrice, hasDiscount, salePrice } from '@/lib/format'
+import { useLanguage } from '@/i18n/LanguageContext'
+import { localizeProduct } from '@/i18n/product'
+import { assetUrl, hasDiscount, salePrice } from '@/lib/format'
 import type { Product } from '@/types'
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart()
+  const { t, lang, formatPrice, formatNumber } = useLanguage()
+  const shown = localizeProduct(product, lang)
   const soldOut = product.stock <= 0
   const price = salePrice(product)
 
@@ -17,7 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <img
           src={assetUrl(product.images[0] ?? '')}
-          alt={product.name}
+          alt={shown.name}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -25,18 +29,18 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex flex-col gap-1.5">
             {hasDiscount(product) && (
               <span className="rounded-full bg-accent-500 px-2.5 py-1 text-[11px] font-bold text-brand-950 shadow-lg">
-                -{product.discountPercent}%
+                -{formatNumber(product.discountPercent ?? 0)}%
               </span>
             )}
-            {product.badge && (
+            {shown.badge && (
               <span className="rounded-full bg-brand-950/80 px-2.5 py-1 text-[11px] font-semibold text-brand-100 backdrop-blur">
-                {product.badge}
+                {shown.badge}
               </span>
             )}
           </div>
           {soldOut && (
             <span className="rounded-full bg-brand-950/85 px-2.5 py-1 text-[11px] font-semibold text-brand-200 backdrop-blur">
-              Sold out
+              {t('common.soldOut')}
             </span>
           )}
         </div>
@@ -44,20 +48,20 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-semibold tracking-wider text-brand-300 uppercase">
-          {product.brand}
+          {shown.brand}
         </p>
         <h3 className="mt-1 text-base leading-snug font-semibold text-white">
           <Link to={`/product/${product.id}`} className="hover:text-brand-200">
-            {product.name}
+            {shown.name}
           </Link>
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm text-brand-200/80">{product.shortDescription}</p>
+        <p className="mt-2 line-clamp-2 text-sm text-brand-200/80">{shown.shortDescription}</p>
 
         {product.rating !== undefined && (
           <div className="mt-3 flex items-center gap-1.5 text-xs text-brand-200">
             <Star className="size-3.5 fill-accent-500 text-accent-500" aria-hidden="true" />
             <span className="font-semibold text-white">{product.rating.toFixed(1)}</span>
-            <span className="text-brand-300/70">({product.reviewCount ?? 0})</span>
+            <span className="text-brand-300/70">({formatNumber(product.reviewCount ?? 0)})</span>
           </div>
         )}
 
@@ -72,11 +76,13 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={() => add(product.id)}
             disabled={soldOut}
-            aria-label={soldOut ? `${product.name} is sold out` : `Add ${product.name} to cart`}
+            aria-label={`${soldOut ? t('common.soldOut') : t('product.addToCart')} — ${shown.name}`}
             className="btn-primary px-3.5 py-2.5"
           >
             <ShoppingCart className="size-4" aria-hidden="true" />
-            <span className="sr-only sm:not-sr-only">{soldOut ? 'Sold out' : 'Add'}</span>
+            <span className="sr-only sm:not-sr-only">
+              {soldOut ? t('common.soldOut') : t('common.add')}
+            </span>
           </button>
         </div>
       </div>

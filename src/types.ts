@@ -40,6 +40,22 @@ export type Product = {
   badge?: string
 }
 
+/**
+ * Bengali text for one product. Every field is optional — anything you leave
+ * out falls back to the English entry in products.ts, so a half-translated
+ * catalog still renders correctly.
+ */
+export type ProductTranslation = {
+  name?: string
+  brand?: string
+  shortDescription?: string
+  description?: string
+  highlights?: string[]
+  /** Spec values only; the keys translate through the shared specs dictionary. */
+  specs?: Record<string, string>
+  badge?: string
+}
+
 export type CartLine = {
   productId: string
   quantity: number

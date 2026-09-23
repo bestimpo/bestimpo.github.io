@@ -63,6 +63,22 @@
     scrollbar-gutter: stable;
   }
 
+  /*
+   * Bengali needs a font with the right conjuncts and a taller line box.
+   * Driven by <html lang>, which LanguageProvider keeps in sync.
+   */
+  html[lang='bn'] body,
+  html[lang='bn'] h1,
+  html[lang='bn'] h2,
+  html[lang='bn'] h3,
+  html[lang='bn'] h4 {
+    font-family: 'Noto Sans Bengali', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  html[lang='bn'] body {
+    line-height: 1.75;
+  }
+
   body {
     @apply bg-brand-950 font-sans text-brand-50 antialiased;
   }

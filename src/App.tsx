@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer'
 import { Navbar } from '@/components/Navbar'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { CartProvider } from '@/context/CartContext'
+import { LanguageProvider, useLanguage } from '@/i18n/LanguageContext'
 import { About } from '@/pages/About'
 import { Checkout } from '@/pages/Checkout'
 import { Contact } from '@/pages/Contact'
@@ -12,15 +13,17 @@ import { NotFound } from '@/pages/NotFound'
 import { ProductDetail } from '@/pages/ProductDetail'
 import { Shop } from '@/pages/Shop'
 
-export default function App() {
+function Shell() {
+  const { t } = useLanguage()
+
   return (
-    <CartProvider>
+    <>
       <ScrollToTop />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-brand-500 focus:px-4 focus:py-2 focus:font-semibold focus:text-brand-950"
       >
-        Skip to content
+        {t('nav.skipToContent')}
       </a>
       <div className="flex min-h-dvh flex-col">
         <Navbar />
@@ -38,6 +41,16 @@ export default function App() {
         <Footer />
       </div>
       <CartDrawer />
-    </CartProvider>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <CartProvider>
+        <Shell />
+      </CartProvider>
+    </LanguageProvider>
   )
 }

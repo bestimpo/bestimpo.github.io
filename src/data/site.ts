@@ -9,19 +9,22 @@ export const site = {
     'We test every gadget we list. No filler stock, no inflated prices — just the audio, wearables, power and smart-home gear we would buy ourselves.',
   domain: 'bestimpo.com',
   email: 'orders@bestimpo.com',
-  phone: '+1 (555) 014-9922',
-  whatsapp: '15550149922',
-  address: '12 Circuit Lane, Suite 400',
+  // Placeholders — swap these for the real shop details.
+  phone: '+880 1700-000000',
+  whatsapp: '8801700000000',
+  address: 'House 12, Road 7, Dhanmondi, Dhaka 1205',
   hours: 'Sat–Thu, 10:00–19:00',
   currency: {
-    code: 'USD',
-    symbol: '$',
-    /** Intl locale used for number grouping. */
-    locale: 'en-US',
+    code: 'BDT',
+    symbol: '৳',
+    /**
+     * Grouping and digits come from the active language (en-BD or bn-BD),
+     * see src/i18n/index.ts. Only the symbol is set here.
+     */
   },
   /** Orders at or above this subtotal ship free. Set to 0 to always charge. */
-  freeShippingThreshold: 199,
-  shippingFlatRate: 9,
+  freeShippingThreshold: 5000,
+  shippingFlatRate: 120,
   social: {
     facebook: 'https://facebook.com/bestimpo',
     instagram: 'https://instagram.com/bestimpo',

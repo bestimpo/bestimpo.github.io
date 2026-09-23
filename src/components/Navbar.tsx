@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Menu, Search, ShoppingCart, X } from 'lucide-react'
+import { LanguageToggle } from '@/components/LanguageToggle'
 import { useCart } from '@/context/CartContext'
+import { useLanguage } from '@/i18n/LanguageContext'
 import { site } from '@/data/site'
 import logo from '@/assets/logo.png'
+import type { TranslationKey } from '@/i18n/en'
 
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
+const links: { to: string; key: TranslationKey }[] = [
+  { to: '/', key: 'nav.home' },
+  { to: '/shop', key: 'nav.shop' },
+  { to: '/about', key: 'nav.about' },
+  { to: '/contact', key: 'nav.contact' },
 ]
 
 export function Navbar() {
   const { itemCount, openCart } = useCart()
+  const { t } = useLanguage()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [scrolled, setScrolled] = useState(false)
@@ -41,12 +45,12 @@ export function Navbar() {
           : 'border-b border-transparent bg-transparent'
       }`}
     >
-      <div className="container-page flex h-16 items-center gap-4 sm:h-20">
-        <Link to="/" className="shrink-0" aria-label={`${site.name} home`}>
-          <img src={logo} alt={site.name} className="h-8 w-auto sm:h-9" />
+      <div className="container-page flex h-20 items-center gap-4 sm:h-24">
+        <Link to="/" className="shrink-0" aria-label={`${site.name} ${t('nav.home')}`}>
+          <img src={logo} alt={site.name} className="h-11 w-auto sm:h-14" />
         </Link>
 
-        <nav className="ml-4 hidden items-center gap-1 lg:flex">
+        <nav className="ml-2 hidden items-center gap-1 lg:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -58,14 +62,14 @@ export function Navbar() {
                 }`
               }
             >
-              {link.label}
+              {t(link.key)}
             </NavLink>
           ))}
         </nav>
 
         <form onSubmit={submitSearch} className="ml-auto hidden max-w-xs flex-1 md:block">
           <label className="sr-only" htmlFor="site-search">
-            Search products
+            {t('nav.searchLabel')}
           </label>
           <div className="relative">
             <Search
@@ -77,18 +81,20 @@ export function Navbar() {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search gadgets…"
+              placeholder={t('nav.searchPlaceholder')}
               className="field py-2.5 pl-9"
             />
           </div>
         </form>
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
+          <LanguageToggle className="hidden sm:flex" />
+
           <button
             type="button"
             onClick={openCart}
             className="btn-ghost relative px-3 py-2.5"
-            aria-label={`Open cart, ${itemCount} item${itemCount === 1 ? '' : 's'}`}
+            aria-label={t('nav.openCart', { count: itemCount })}
           >
             <ShoppingCart className="size-5" aria-hidden="true" />
             {itemCount > 0 && (
@@ -103,7 +109,7 @@ export function Navbar() {
             onClick={() => setMobileOpen((open) => !open)}
             className="btn-ghost px-3 py-2.5 lg:hidden"
             aria-expanded={mobileOpen}
-            aria-label="Toggle navigation"
+            aria-label={t('nav.toggleMenu')}
           >
             {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -123,8 +129,8 @@ export function Navbar() {
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search gadgets…"
-                  aria-label="Search products"
+                  placeholder={t('nav.searchPlaceholder')}
+                  aria-label={t('nav.searchLabel')}
                   className="field py-2.5 pl-9"
                 />
               </div>
@@ -142,10 +148,11 @@ export function Navbar() {
                     }`
                   }
                 >
-                  {link.label}
+                  {t(link.key)}
                 </NavLink>
               ))}
             </nav>
+            <LanguageToggle className="w-fit sm:hidden" />
           </div>
         </div>
       )}

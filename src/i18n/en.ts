@@ -227,6 +227,22 @@ export const en = {
     title: '404',
     body: 'That page — or that product — is not on our shelves.',
   },
+  categories: {
+    audio: 'Audio',
+    wearables: 'Wearables',
+    power: 'Power',
+    'smart-home': 'Smart Home',
+    computing: 'Computing',
+    accessories: 'Accessories',
+  },
+  categoryBlurbs: {
+    audio: 'Earbuds, headphones and speakers worth the battery life.',
+    wearables: 'Watches and bands that survive a real week.',
+    power: 'Banks, GaN bricks and cables that charge at rated speed.',
+    'smart-home': 'Plugs, cams and sensors with local control.',
+    computing: 'Docks, drives and desk gear for the daily driver.',
+    accessories: 'Mounts, hubs and the small parts that finish a setup.',
+  },
   specs: {
     /** Spec keys repeat across products, so they are translated once here. */
     Driver: 'Driver',

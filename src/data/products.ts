@@ -17,6 +17,12 @@ import type { Product } from '@/types'
  * Images:
  *   'products/foo.jpg'            -> served from public/products/foo.jpg
  *   'https://cdn.example/foo.jpg' -> used as-is
+ *   List as many as you like — the first is the primary one shown on cards,
+ *   and the product page gets arrows, thumbnails and a zoom view for the rest.
+ *
+ * Bengali:
+ *   Product text is translated in src/data/products.bn.ts, keyed by id.
+ *   Anything you leave out there falls back to the English below.
  */
 export const products: Product[] = [
   {
@@ -24,9 +30,13 @@ export const products: Product[] = [
     name: 'Pulse Air Pro ANC Earbuds',
     brand: 'Bestimpo Audio',
     category: 'audio',
-    price: 129,
+    price: 15900,
     discountPercent: 30,
-    images: ['products/pulse-air-pro.svg'],
+    images: [
+      'products/pulse-air-pro.svg',
+      'products/pulse-air-pro-detail.svg',
+      'products/pulse-air-pro-box.svg',
+    ],
     shortDescription: 'Hybrid ANC, 42 h with the case, and a transparency mode you will actually leave on.',
     description:
       'Two feedback mics per side cut cabin and traffic noise by up to 42 dB without the pressure feeling cheap ANC gives you. The 11 mm drivers stay composed at volume, and Bluetooth 5.4 holds a multipoint link to a laptop and a phone at the same time.',
@@ -55,9 +65,13 @@ export const products: Product[] = [
     name: 'Stratos GT Smartwatch',
     brand: 'Bestimpo Wear',
     category: 'wearables',
-    price: 189,
+    price: 22900,
     discountPercent: 20,
-    images: ['products/stratos-gt.svg'],
+    images: [
+      'products/stratos-gt.svg',
+      'products/stratos-gt-detail.svg',
+      'products/stratos-gt-box.svg',
+    ],
     shortDescription: '1.43" AMOLED, dual-band GPS and 14 days of battery on a normal week.',
     description:
       'A running watch that passes as a dress watch. Dual-band GPS locks in under eight seconds and holds a clean track between tall buildings, and the always-on AMOLED is readable in direct sun at 1000 nits.',
@@ -85,9 +99,13 @@ export const products: Product[] = [
     name: 'VoltCore 140 W GaN Charger',
     brand: 'VoltCore',
     category: 'power',
-    price: 79,
+    price: 9500,
     discountPercent: 15,
-    images: ['products/voltcore-140w.svg'],
+    images: [
+      'products/voltcore-140w.svg',
+      'products/voltcore-140w-detail.svg',
+      'products/voltcore-140w-box.svg',
+    ],
     shortDescription: 'Four ports, 140 W PD 3.1, and small enough to forget in a jacket pocket.',
     description:
       'One brick for the laptop, the phone, the watch and the earbuds. PD 3.1 pushes a full 140 W to a single USB-C port, and the power budget re-balances live as you plug things in instead of dropping everyone to 20 W.',
@@ -116,8 +134,12 @@ export const products: Product[] = [
     name: 'Nimbus Mesh Wi-Fi 6E (2-pack)',
     brand: 'Nimbus',
     category: 'computing',
-    price: 259,
-    images: ['products/nimbus-mesh.svg'],
+    price: 31900,
+    images: [
+      'products/nimbus-mesh.svg',
+      'products/nimbus-mesh-detail.svg',
+      'products/nimbus-mesh-box.svg',
+    ],
     shortDescription: 'Tri-band 6E mesh that covers 4,000 sq ft without a dead hallway.',
     description:
       'A dedicated 6 GHz backhaul means the satellite does not eat half your bandwidth relaying. Set up takes about four minutes, and the units keep working on local rules if your internet drops.',
@@ -144,9 +166,13 @@ export const products: Product[] = [
     name: 'EchoField 360 Speaker',
     brand: 'Bestimpo Audio',
     category: 'audio',
-    price: 149,
+    price: 17900,
     discountPercent: 25,
-    images: ['products/echofield-360.svg'],
+    images: [
+      'products/echofield-360.svg',
+      'products/echofield-360-detail.svg',
+      'products/echofield-360-box.svg',
+    ],
     shortDescription: 'Room-filling 360° sound, 24 h battery, IP67 — pool to patio to campsite.',
     description:
       'Two up-firing tweeters and an opposed pair of passive radiators give it a soundstage that does not care which way you point it. It survives being dropped in a pool, and two units pair into a real stereo field.',
@@ -173,9 +199,13 @@ export const products: Product[] = [
     name: 'Sentry Cam 2K Indoor',
     brand: 'Sentry',
     category: 'smart-home',
-    price: 69,
+    price: 8400,
     discountPercent: 35,
-    images: ['products/sentry-cam-2k.svg'],
+    images: [
+      'products/sentry-cam-2k.svg',
+      'products/sentry-cam-2k-detail.svg',
+      'products/sentry-cam-2k-box.svg',
+    ],
     shortDescription: '2K detail, on-device person detection, and an SD slot so no subscription is required.',
     description:
       'Person and pet detection runs on the camera, not in a vendor cloud, so alerts land in about a second and keep working offline. Records to a microSD card up to 256 GB — cloud storage is optional, not assumed.',
@@ -203,9 +233,13 @@ export const products: Product[] = [
     name: 'Traverse 27000 Power Bank',
     brand: 'VoltCore',
     category: 'power',
-    price: 119,
+    price: 14500,
     discountPercent: 18,
-    images: ['products/traverse-27000.svg'],
+    images: [
+      'products/traverse-27000.svg',
+      'products/traverse-27000-detail.svg',
+      'products/traverse-27000-box.svg',
+    ],
     shortDescription: '27,000 mAh at 100 W out — charges a 14" laptop and still clears airline limits.',
     description:
       'The capacity sits just under the 100 Wh carry-on ceiling, so it flies. A small display tells you the real remaining watt-hours instead of four ambiguous LEDs, and 100 W out means a laptop charges while you use it.',
@@ -232,9 +266,13 @@ export const products: Product[] = [
     name: 'Lumen Strip Pro RGBIC 5 m',
     brand: 'Lumen',
     category: 'smart-home',
-    price: 49,
+    price: 5900,
     discountPercent: 40,
-    images: ['products/lumen-strip-pro.svg'],
+    images: [
+      'products/lumen-strip-pro.svg',
+      'products/lumen-strip-pro-detail.svg',
+      'products/lumen-strip-pro-box.svg',
+    ],
     shortDescription: 'Segment-addressable RGBIC with music sync that tracks the beat, not the volume.',
     description:
       'RGBIC means 30 independently coloured segments across five metres, so gradients and chases look intentional rather than like a colour wash. The adhesive is 3M VHB and actually holds on painted drywall.',
@@ -262,9 +300,13 @@ export const products: Product[] = [
     name: 'DockMaster 12-in-1 Hub',
     brand: 'Nimbus',
     category: 'computing',
-    price: 139,
+    price: 16900,
     discountPercent: 22,
-    images: ['products/dockmaster-hub.svg'],
+    images: [
+      'products/dockmaster-hub.svg',
+      'products/dockmaster-hub-detail.svg',
+      'products/dockmaster-hub-box.svg',
+    ],
     shortDescription: 'Dual 4K60, 2.5 GbE and 100 W passthrough down one Thunderbolt cable.',
     description:
       'Drives two 4K displays at a real 60 Hz on both Windows and Apple silicon, with 2.5 GbE for the wired desk and 100 W passthrough so the laptop charges off the same cable. The aluminium shell doubles as the heatsink.',
@@ -291,9 +333,13 @@ export const products: Product[] = [
     name: 'FlexCore Magnetic 3-in-1 Stand',
     brand: 'Bestimpo',
     category: 'accessories',
-    price: 59,
+    price: 7200,
     discountPercent: 15,
-    images: ['products/flexcore-stand.svg'],
+    images: [
+      'products/flexcore-stand.svg',
+      'products/flexcore-stand-detail.svg',
+      'products/flexcore-stand-box.svg',
+    ],
     shortDescription: 'Folds flat to 12 mm, charges phone, watch and buds at full speed.',
     description:
       'Magnets strong enough to hold the phone in landscape while you scrub a video, and a hinge that folds the whole thing down to the thickness of a passport. 15 W to the phone, not the throttled 7.5 W most travel stands manage.',
@@ -321,8 +367,12 @@ export const products: Product[] = [
     name: 'AeroCool Laptop Riser',
     brand: 'Bestimpo',
     category: 'accessories',
-    price: 39,
-    images: ['products/aerocool-riser.svg'],
+    price: 4700,
+    images: [
+      'products/aerocool-riser.svg',
+      'products/aerocool-riser-detail.svg',
+      'products/aerocool-riser-box.svg',
+    ],
     shortDescription: 'Six height stops, open airflow, and it does not wobble when you type hard.',
     description:
       'Solid aluminium with a rubber-lined cradle that grips a 13" ultrabook and a 17" gaming laptop equally. Six detents let you match the screen to your eye line, and the open frame drops sustained CPU temps by around 8 °C.',
@@ -349,9 +399,13 @@ export const products: Product[] = [
     name: 'ClearLine USB4 Cable 1 m',
     brand: 'VoltCore',
     category: 'accessories',
-    price: 29,
+    price: 3500,
     discountPercent: 20,
-    images: ['products/clearline-usb4.svg'],
+    images: [
+      'products/clearline-usb4.svg',
+      'products/clearline-usb4-detail.svg',
+      'products/clearline-usb4-box.svg',
+    ],
     shortDescription: '40 Gbps, 240 W, 8K60 video — one cable that never makes you guess.',
     description:
       'Most USB-C cables quietly do one thing well and everything else badly. This one carries full 40 Gbps data, 240 W of EPR power and 8K60 display at the same time, and the braided jacket is rated for 25,000 bends.',

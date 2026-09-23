@@ -1,24 +1,35 @@
 import { site } from '@/data/site'
+import { localeFor, type Lang } from '@/i18n'
 import type { Product } from '@/types'
 
-const whole = new Intl.NumberFormat(site.currency.locale, {
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-})
+const formatters = new Map<string, Intl.NumberFormat>()
 
-const withCents = new Intl.NumberFormat(site.currency.locale, {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
+const formatterFor = (locale: string, decimals: number): Intl.NumberFormat => {
+  const key = `${locale}:${decimals}`
+  let formatter = formatters.get(key)
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    })
+    formatters.set(key, formatter)
+  }
+  return formatter
+}
 
 /**
- * "$1,299" for round amounts, "$29.40" once a discount leaves cents —
- * never "$29.4". Symbol comes from site.currency, so one edit changes the shop.
+ * "৳14,900" in English, "৳১৪,৯০০" in Bengali — bn-BD switches both the digits
+ * and the grouping (lakh style). Cents only appear when an amount actually has
+ * them, so a discount never renders as "৳29.4".
+ *
+ * Components should prefer `useLanguage().formatPrice`, which passes the active
+ * language for you. The `lang` argument exists for non-React callers such as
+ * the order email.
  */
-export const formatPrice = (amount: number): string => {
+export const formatPrice = (amount: number, lang: Lang = 'en'): string => {
   const rounded = Math.round(amount * 100) / 100
-  const format = Number.isInteger(rounded) ? whole : withCents
-  return `${site.currency.symbol}${format.format(rounded)}`
+  const decimals = Number.isInteger(rounded) ? 0 : 2
+  return `${site.currency.symbol}${formatterFor(localeFor(lang), decimals).format(rounded)}`
 }
 
 /** Price the customer actually pays, after any discountPercent. */
@@ -28,8 +39,7 @@ export const salePrice = (product: Product): number => {
   return Math.round(product.price * (1 - percent / 100) * 100) / 100
 }
 
-export const hasDiscount = (product: Product): boolean =>
-  (product.discountPercent ?? 0) > 0
+export const hasDiscount = (product: Product): boolean => (product.discountPercent ?? 0) > 0
 
 export const savingsAmount = (product: Product): number =>
   Math.round((product.price - salePrice(product)) * 100) / 100
