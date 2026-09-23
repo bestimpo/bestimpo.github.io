@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Traverse 27000 — detail view placeholder">
+  <defs>
+    <linearGradient id="g" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b95f6"/>
+      <stop offset="1" stop-color="#14344b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.34" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="600"/></clipPath>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <g clip-path="url(#frame)"><g transform="translate(400 290) scale(1.75) translate(-400 -300)"><rect x="292" y="212" width="216" height="176" rx="36" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="14"/><path d="M406 244l-44 78h40l-14 62 58-88h-44z" fill="#fff" fill-opacity=".9"/><path d="M348 388v34m104-34v34" stroke="#fff" stroke-opacity=".5" stroke-width="14" stroke-linecap="round"/></g></g>
+  <text x="400" y="534" text-anchor="middle" font-family="Sora, Inter, system-ui, sans-serif" font-size="30" font-weight="700" fill="#ffffff" fill-opacity=".92">Traverse 27000</text>
+  <text x="400" y="566" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="500" letter-spacing="3" fill="#ffffff" fill-opacity=".55">BESTIMPO · DETAIL</text>
+</svg>
