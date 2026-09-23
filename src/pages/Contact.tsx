@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { CheckCircle2, Clock, Loader2, Mail, MapPin, MessageCircle, Phone, Send, TriangleAlert } from 'lucide-react'
 import { emailjsConfig, isEmailjsConfigured, site } from '@/data/site'
 import { sendContactEmail } from '@/lib/email'
+import { useLanguage } from '@/i18n/LanguageContext'
+import { formatPrice } from '@/lib/format'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
@@ -9,6 +11,7 @@ export function Contact() {
   const [fields, setFields] = useState({ name: '', email: '', subject: '', message: '' })
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
+  const { t, lang } = useLanguage()
 
   const configured = isEmailjsConfigured(emailjsConfig.contactTemplateId)
 
@@ -33,24 +36,19 @@ export function Contact() {
 
   return (
     <div className="container-page py-12 lg:py-16">
-      <p className="text-xs font-semibold tracking-wider text-brand-300 uppercase">Contact</p>
-      <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Talk to a human</h1>
-      <p className="mt-3 max-w-xl text-brand-200/85">
-        Product questions, stock checks, warranty claims or a bulk order — same inbox, usually
-        answered within a few hours during opening times.
-      </p>
+      <p className="text-xs font-semibold tracking-wider text-brand-300 uppercase">{t('contact.eyebrow')}</p>
+      <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{t('contact.title')}</h1>
+      <p className="mt-3 max-w-xl text-brand-200/85">{t('contact.subtitle')}</p>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-3">
           {status === 'sent' ? (
             <div className="card-surface px-6 py-14 text-center">
               <CheckCircle2 className="mx-auto size-12 text-neon-400" aria-hidden="true" />
-              <h2 className="mt-4 text-xl font-bold text-white">Message sent</h2>
-              <p className="mt-2 text-brand-200/85">
-                We have it. Expect a reply at the email you gave us.
-              </p>
+              <h2 className="mt-4 text-xl font-bold text-white">{t('contact.sentTitle')}</h2>
+              <p className="mt-2 text-brand-200/85">{t('contact.sentBody')}</p>
               <button type="button" onClick={() => setStatus('idle')} className="btn-ghost mt-6">
-                Send another
+                {t('contact.sendAnother')}
               </button>
             </div>
           ) : (
@@ -58,13 +56,7 @@ export function Contact() {
               {!configured && (
                 <div className="flex gap-3 rounded-2xl border border-accent-500/30 bg-accent-500/10 px-4 py-3 text-sm text-accent-400">
                   <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  <p>
-                    EmailJS keys are not set yet, so this form cannot send. Email{' '}
-                    <a href={`mailto:${site.email}`} className="underline">
-                      {site.email}
-                    </a>{' '}
-                    in the meantime.
-                  </p>
+                  <p>{t('contact.notConfigured', { email: site.email })}</p>
                 </div>
               )}
 
@@ -72,7 +64,7 @@ export function Contact() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="label" htmlFor="contact-name">
-                      Your name
+                      {t('contact.yourName')}
                     </label>
                     <input
                       id="contact-name"
@@ -85,7 +77,7 @@ export function Contact() {
                   </div>
                   <div>
                     <label className="label" htmlFor="contact-email">
-                      Email
+                      {t('contact.email')}
                     </label>
                     <input
                       id="contact-email"
@@ -100,20 +92,20 @@ export function Contact() {
                 </div>
                 <div>
                   <label className="label" htmlFor="contact-subject">
-                    Subject
+                    {t('contact.subject')}
                   </label>
                   <input
                     id="contact-subject"
                     required
                     value={fields.subject}
                     onChange={update('subject')}
-                    placeholder="Stock check: VoltCore 140 W"
+                    placeholder={t('contact.subjectPlaceholder')}
                     className="field"
                   />
                 </div>
                 <div>
                   <label className="label" htmlFor="contact-message">
-                    Message
+                    {t('contact.message')}
                   </label>
                   <textarea
                     id="contact-message"
@@ -137,12 +129,12 @@ export function Contact() {
                 {status === 'sending' ? (
                   <>
                     <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-                    Sending…
+                    {t('contact.sending')}
                   </>
                 ) : (
                   <>
                     <Send className="size-4" aria-hidden="true" />
-                    Send message
+                    {t('contact.send')}
                   </>
                 )}
               </button>
@@ -152,7 +144,7 @@ export function Contact() {
 
         <aside className="space-y-4 lg:col-span-2">
           <div className="card-surface p-6">
-            <h2 className="text-sm font-bold tracking-wider text-white uppercase">Direct lines</h2>
+            <h2 className="text-sm font-bold tracking-wider text-white uppercase">{t('contact.directLines')}</h2>
             <ul className="mt-4 space-y-4 text-sm">
               <li className="flex gap-3">
                 <Mail className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden="true" />
@@ -177,7 +169,7 @@ export function Contact() {
                   rel="noreferrer noopener"
                   className="text-brand-100 hover:text-white"
                 >
-                  WhatsApp us
+                  {t('contact.whatsappUs')}
                 </a>
               </li>
               <li className="flex gap-3">
@@ -192,27 +184,23 @@ export function Contact() {
           </div>
 
           <div className="card-surface p-6">
-            <h2 className="text-sm font-bold tracking-wider text-white uppercase">Before you ask</h2>
+            <h2 className="text-sm font-bold tracking-wider text-white uppercase">{t('contact.faqTitle')}</h2>
             <dl className="mt-4 space-y-4 text-sm">
               <div>
-                <dt className="font-semibold text-white">Do you ship outside the city?</dt>
+                <dt className="font-semibold text-white">{t('contact.faq1Q')}</dt>
                 <dd className="mt-1 text-brand-200/80">
-                  Yes — nationwide courier, 2–4 days, free over{' '}
-                  {site.currency.symbol}
-                  {site.freeShippingThreshold}.
+                  {t('contact.faq1A', {
+                    amount: formatPrice(site.freeShippingThreshold, lang),
+                  })}
                 </dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Can I pay on delivery?</dt>
-                <dd className="mt-1 text-brand-200/80">
-                  Yes. Cash on delivery, bank transfer or mobile wallet — pick at checkout.
-                </dd>
+                <dt className="font-semibold text-white">{t('contact.faq2Q')}</dt>
+                <dd className="mt-1 text-brand-200/80">{t('contact.faq2A')}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Is the warranty local?</dt>
-                <dd className="mt-1 text-brand-200/80">
-                  Handled by us directly. Bring the item and the order reference.
-                </dd>
+                <dt className="font-semibold text-white">{t('contact.faq3Q')}</dt>
+                <dd className="mt-1 text-brand-200/80">{t('contact.faq3A')}</dd>
               </div>
             </dl>
           </div>

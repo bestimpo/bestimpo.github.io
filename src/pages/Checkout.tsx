@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import { CheckCircle2, CreditCard, Loader2, ShoppingCart, TriangleAlert } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { emailjsConfig, isEmailjsConfigured, site } from '@/data/site'
-import { assetUrl, formatPrice } from '@/lib/format'
+import { assetUrl } from '@/lib/format'
+import { useLanguage } from '@/i18n/LanguageContext'
+import { localizeProduct } from '@/i18n/product'
 import { makeOrderId, orderMailtoUrl, sendOrderEmail } from '@/lib/email'
 import type { CartLineView, OrderCustomer } from '@/types'
 
@@ -22,6 +24,7 @@ type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 export function Checkout() {
   const { lines, subtotal, savings, shipping, total, clear } = useCart()
+  const { t, lang, formatPrice, formatNumber } = useLanguage()
   const [customer, setCustomer] = useState<OrderCustomer>(emptyCustomer)
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
@@ -63,22 +66,26 @@ export function Checkout() {
       <div className="container-page py-16 lg:py-24">
         <div className="card-surface mx-auto max-w-xl px-6 py-12 text-center">
           <CheckCircle2 className="mx-auto size-14 text-neon-400" aria-hidden="true" />
-          <h1 className="mt-5 text-2xl font-bold text-white sm:text-3xl">Order received</h1>
+          <h1 className="mt-5 text-2xl font-bold text-white sm:text-3xl">{t('checkout.doneTitle')}</h1>
           <p className="mt-3 text-brand-200/85">
-            Reference <strong className="text-white">{orderId}</strong>. We emailed the details to{' '}
-            {site.email} and will confirm stock and delivery with you at{' '}
-            <strong className="text-white">{customer.email}</strong>.
+            {t('checkout.doneBody', {
+              reference: orderId,
+              shopEmail: site.email,
+              customerEmail: customer.email,
+            })}
           </p>
           <p className="mt-4 text-sm text-brand-300">
-            {placedLines.reduce((sum, line) => sum + line.quantity, 0)} item(s) ·{' '}
-            {formatPrice(totals.total)}
+            {t('checkout.doneCount', {
+              count: formatNumber(placedLines.reduce((sum, line) => sum + line.quantity, 0)),
+              amount: formatPrice(totals.total),
+            })}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/shop" className="btn-primary">
-              Keep shopping
+              {t('common.keepShopping')}
             </Link>
             <Link to="/" className="btn-ghost">
-              Back home
+              {t('common.backHome')}
             </Link>
           </div>
         </div>
@@ -91,10 +98,10 @@ export function Checkout() {
       <div className="container-page py-16 lg:py-24">
         <div className="card-surface mx-auto max-w-lg px-6 py-14 text-center">
           <ShoppingCart className="mx-auto size-12 text-brand-300" aria-hidden="true" />
-          <h1 className="mt-5 text-2xl font-bold text-white">Your cart is empty</h1>
-          <p className="mt-2 text-brand-200/80">Add a gadget and the checkout will open up.</p>
+          <h1 className="mt-5 text-2xl font-bold text-white">{t('checkout.emptyTitle')}</h1>
+          <p className="mt-2 text-brand-200/80">{t('checkout.emptySub')}</p>
           <Link to="/shop" className="btn-primary mt-7">
-            Browse gadgets
+            {t('common.browseGadgets')}
           </Link>
         </div>
       </div>
@@ -103,19 +110,13 @@ export function Checkout() {
 
   return (
     <div className="container-page py-10 lg:py-14">
-      <h1 className="text-3xl font-bold text-white sm:text-4xl">Checkout</h1>
-      <p className="mt-2 text-brand-200/75">
-        No card is charged here. We email your order, then confirm payment and delivery directly.
-      </p>
+      <h1 className="text-3xl font-bold text-white sm:text-4xl">{t('checkout.title')}</h1>
+      <p className="mt-2 text-brand-200/75">{t('checkout.subtitle')}</p>
 
       {!configured && (
         <div className="mt-6 flex gap-3 rounded-2xl border border-accent-500/30 bg-accent-500/10 px-5 py-4 text-sm text-accent-400">
           <TriangleAlert className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
-          <p>
-            EmailJS keys are not set, so orders cannot be sent yet. Add the three
-            <code className="mx-1 rounded bg-brand-950/60 px-1.5 py-0.5 text-xs">VITE_EMAILJS_*</code>
-            variables (see README). Submitting will offer a mail-client fallback.
-          </p>
+          <p>{t('checkout.notConfigured')}</p>
         </div>
       )}
 
@@ -124,12 +125,12 @@ export function Checkout() {
         <form onSubmit={submit} className="card-surface space-y-6 p-6 lg:col-span-3">
           <fieldset className="space-y-4" disabled={status === 'sending'}>
             <legend className="text-sm font-bold tracking-wider text-white uppercase">
-              Your details
+              {t('checkout.yourDetails')}
             </legend>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="label" htmlFor="name">
-                  Full name
+                  {t('checkout.fullName')}
                 </label>
                 <input
                   id="name"
@@ -142,7 +143,7 @@ export function Checkout() {
               </div>
               <div>
                 <label className="label" htmlFor="email">
-                  Email
+                  {t('checkout.email')}
                 </label>
                 <input
                   id="email"
@@ -157,7 +158,7 @@ export function Checkout() {
             </div>
             <div>
               <label className="label" htmlFor="phone">
-                Phone
+                {t('checkout.phone')}
               </label>
               <input
                 id="phone"
@@ -173,11 +174,11 @@ export function Checkout() {
 
           <fieldset className="space-y-4" disabled={status === 'sending'}>
             <legend className="text-sm font-bold tracking-wider text-white uppercase">
-              Delivery
+              {t('checkout.delivery')}
             </legend>
             <div>
               <label className="label" htmlFor="address">
-                Street address
+                {t('checkout.address')}
               </label>
               <input
                 id="address"
@@ -191,7 +192,7 @@ export function Checkout() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="label" htmlFor="city">
-                  City
+                  {t('checkout.city')}
                 </label>
                 <input
                   id="city"
@@ -204,7 +205,7 @@ export function Checkout() {
               </div>
               <div>
                 <label className="label" htmlFor="postcode">
-                  Postcode
+                  {t('checkout.postcode')}
                 </label>
                 <input
                   id="postcode"
@@ -217,14 +218,15 @@ export function Checkout() {
             </div>
             <div>
               <label className="label" htmlFor="notes">
-                Order notes <span className="normal-case">(optional)</span>
+                {t('checkout.notes')}{' '}
+                <span className="normal-case">{t('common.optional')}</span>
               </label>
               <textarea
                 id="notes"
                 rows={3}
                 value={customer.notes}
                 onChange={field('notes')}
-                placeholder="Delivery window, landmark, colour preference…"
+                placeholder={t('checkout.notesPlaceholder')}
                 className="field resize-y"
               />
             </div>
@@ -232,11 +234,11 @@ export function Checkout() {
 
           <fieldset className="space-y-3" disabled={status === 'sending'}>
             <legend className="text-sm font-bold tracking-wider text-white uppercase">
-              Payment
+              {t('checkout.payment')}
             </legend>
             <div>
               <label className="label" htmlFor="payment">
-                How you want to pay
+                {t('checkout.paymentLabel')}
               </label>
               <select
                 id="payment"
@@ -245,13 +247,13 @@ export function Checkout() {
                 className="field"
               >
                 <option value="cash-on-delivery" className="bg-brand-950">
-                  Cash on delivery
+                  {t('checkout.cashOnDelivery')}
                 </option>
                 <option value="bank-transfer" className="bg-brand-950">
-                  Bank transfer
+                  {t('checkout.bankTransfer')}
                 </option>
                 <option value="mobile-wallet" className="bg-brand-950">
-                  Mobile wallet
+                  {t('checkout.mobileWallet')}
                 </option>
               </select>
             </div>
@@ -267,7 +269,7 @@ export function Checkout() {
                 href={orderMailtoUrl(customer, lines, totals, orderId)}
                 className="btn-ghost w-full text-red-100"
               >
-                Send this order by email instead
+                {t('checkout.mailFallback')}
               </a>
             </div>
           )}
@@ -276,24 +278,22 @@ export function Checkout() {
             {status === 'sending' ? (
               <>
                 <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-                Sending order…
+                {t('checkout.sending')}
               </>
             ) : (
               <>
                 <CreditCard className="size-4" aria-hidden="true" />
-                Place order · {formatPrice(total)}
+                {t('checkout.placeOrder', { amount: formatPrice(total) })}
               </>
             )}
           </button>
-          <p className="text-center text-xs text-brand-300/60">
-            By placing the order you agree to be contacted about it at the details above.
-          </p>
+          <p className="text-center text-xs text-brand-300/60">{t('checkout.consent')}</p>
         </form>
 
         {/* Summary */}
         <aside className="lg:col-span-2">
           <div className="card-surface sticky top-24 p-6">
-            <h2 className="text-sm font-bold tracking-wider text-white uppercase">Order summary</h2>
+            <h2 className="text-sm font-bold tracking-wider text-white uppercase">{t('checkout.summary')}</h2>
             <ul className="mt-4 space-y-4">
               {lines.map((line) => (
                 <li key={line.productId} className="flex gap-3">
@@ -304,10 +304,10 @@ export function Checkout() {
                   />
                   <div className="min-w-0 flex-1">
                     <p className="line-clamp-2 text-sm font-semibold text-white">
-                      {line.product.name}
+                      {localizeProduct(line.product, lang).name}
                     </p>
                     <p className="text-xs text-brand-300">
-                      {line.quantity} × {formatPrice(line.unitPrice)}
+                      {formatNumber(line.quantity)} × {formatPrice(line.unitPrice)}
                     </p>
                   </div>
                   <p className="text-sm font-bold text-white">{formatPrice(line.lineTotal)}</p>
@@ -317,23 +317,23 @@ export function Checkout() {
 
             <dl className="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
               <div className="flex justify-between text-brand-200">
-                <dt>Subtotal</dt>
+                <dt>{t('cart.subtotal')}</dt>
                 <dd className="font-semibold text-white">{formatPrice(subtotal)}</dd>
               </div>
               {savings > 0 && (
                 <div className="flex justify-between text-neon-400">
-                  <dt>Discounts</dt>
+                  <dt>{t('cart.discounts')}</dt>
                   <dd className="font-semibold">−{formatPrice(savings)}</dd>
                 </div>
               )}
               <div className="flex justify-between text-brand-200">
-                <dt>Shipping</dt>
+                <dt>{t('cart.shipping')}</dt>
                 <dd className="font-semibold text-white">
-                  {shipping === 0 ? 'Free' : formatPrice(shipping)}
+                  {shipping === 0 ? t('common.free') : formatPrice(shipping)}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-white/10 pt-3 text-base">
-                <dt className="font-bold text-white">Total</dt>
+                <dt className="font-bold text-white">{t('cart.total')}</dt>
                 <dd className="font-display font-bold text-white">{formatPrice(total)}</dd>
               </div>
             </dl>

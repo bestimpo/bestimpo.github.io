@@ -57,7 +57,7 @@ export async function sendOrderEmail(
     emailjsConfig.orderTemplateId,
     {
       order_id: orderId,
-      order_date: new Date().toLocaleString(site.currency.locale),
+      order_date: new Date().toLocaleString('en-BD'),
       shop_name: site.name,
       customer_name: customer.name,
       customer_email: customer.email,

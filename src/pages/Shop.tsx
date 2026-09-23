@@ -4,21 +4,25 @@ import { PackageX, SlidersHorizontal } from 'lucide-react'
 import { ProductCard } from '@/components/ProductCard'
 import { categories } from '@/data/categories'
 import { products } from '@/data/products'
+import { useLanguage } from '@/i18n/LanguageContext'
+import { localizeProduct } from '@/i18n/product'
 import { hasDiscount, salePrice } from '@/lib/format'
+import type { TranslationKey } from '@/i18n/en'
 import type { CategorySlug } from '@/types'
 
 type SortKey = 'featured' | 'price-asc' | 'price-desc' | 'discount' | 'rating'
 
-const sortLabels: Record<SortKey, string> = {
-  featured: 'Featured',
-  'price-asc': 'Price: low to high',
-  'price-desc': 'Price: high to low',
-  discount: 'Biggest discount',
-  rating: 'Top rated',
-}
+const sortKeys: { value: SortKey; label: TranslationKey }[] = [
+  { value: 'featured', label: 'shop.sortFeatured' },
+  { value: 'price-asc', label: 'shop.sortPriceAsc' },
+  { value: 'price-desc', label: 'shop.sortPriceDesc' },
+  { value: 'discount', label: 'shop.sortDiscount' },
+  { value: 'rating', label: 'shop.sortRating' },
+]
 
 export function Shop() {
   const [params, setParams] = useSearchParams()
+  const { t, lang, formatNumber } = useLanguage()
 
   const query = params.get('q')?.trim().toLowerCase() ?? ''
   const category = (params.get('category') ?? 'all') as CategorySlug | 'all'
@@ -37,7 +41,16 @@ export function Shop() {
       if (category !== 'all' && product.category !== category) return false
       if (inStockOnly && product.stock <= 0) return false
       if (!query) return true
-      const haystack = `${product.name} ${product.brand} ${product.shortDescription} ${product.category}`
+      // Search both languages, so a Bengali term finds an English-only entry too.
+      const translated = localizeProduct(product, 'bn')
+      const haystack = [
+        product.name,
+        product.brand,
+        product.shortDescription,
+        product.category,
+        translated.name,
+        translated.shortDescription,
+      ].join(' ')
       return haystack.toLowerCase().includes(query)
     })
 
@@ -68,12 +81,18 @@ export function Shop() {
   return (
     <div className="container-page py-10 lg:py-14">
       <header>
-        <p className="text-xs font-semibold tracking-wider text-brand-300 uppercase">Shop</p>
+        <p className="text-xs font-semibold tracking-wider text-brand-300 uppercase">
+          {t('shop.eyebrow')}
+        </p>
         <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
-          {activeCategory ? activeCategory.name : 'All gadgets'}
+          {activeCategory
+            ? t(`categories.${activeCategory.slug}` as TranslationKey)
+            : t('shop.allTitle')}
         </h1>
         <p className="mt-2 text-brand-200/75">
-          {activeCategory?.blurb ?? 'Everything we currently stock, newest shelves first.'}
+          {activeCategory
+            ? t(`categoryBlurbs.${activeCategory.slug}` as TranslationKey)
+            : t('shop.allSub')}
         </p>
       </header>
 
@@ -88,7 +107,7 @@ export function Shop() {
               : 'border border-white/10 bg-white/5 text-brand-200 hover:text-white'
           }`}
         >
-          All
+          {t('shop.all')}
         </button>
         {categories.map((item) => (
           <button
@@ -101,7 +120,7 @@ export function Shop() {
                 : 'border border-white/10 bg-white/5 text-brand-200 hover:text-white'
             }`}
           >
-            {item.name}
+            {t(`categories.${item.slug}` as TranslationKey)}
           </button>
         ))}
       </div>
@@ -110,10 +129,9 @@ export function Shop() {
       <div className="mt-6 flex flex-wrap items-center gap-4 border-y border-white/10 py-4">
         <p className="flex items-center gap-2 text-sm text-brand-200">
           <SlidersHorizontal className="size-4 text-brand-400" aria-hidden="true" />
-          <span>
-            <strong className="text-white">{visible.length}</strong>{' '}
-            {visible.length === 1 ? 'product' : 'products'}
-          </span>
+          {t(visible.length === 1 ? 'shop.productCountOne' : 'shop.productCount', {
+            count: formatNumber(visible.length),
+          })}
         </p>
 
         {query && (
@@ -133,12 +151,12 @@ export function Shop() {
             onChange={(event) => update('stock', event.target.checked ? 'in' : null)}
             className="size-4 rounded border-white/20 bg-brand-950 accent-brand-500"
           />
-          In stock only
+          {t('shop.inStockOnly')}
         </label>
 
         <div className="ml-auto flex items-center gap-2">
           <label htmlFor="sort" className="text-sm text-brand-200">
-            Sort
+            {t('shop.sort')}
           </label>
           <select
             id="sort"
@@ -146,9 +164,9 @@ export function Shop() {
             onChange={(event) => update('sort', event.target.value)}
             className="field w-auto py-2"
           >
-            {(Object.keys(sortLabels) as SortKey[]).map((key) => (
-              <option key={key} value={key} className="bg-brand-950">
-                {sortLabels[key]}
+            {sortKeys.map((option) => (
+              <option key={option.value} value={option.value} className="bg-brand-950">
+                {t(option.label)}
               </option>
             ))}
           </select>
@@ -160,28 +178,27 @@ export function Shop() {
         <div className="card-surface mt-10 flex flex-col items-center gap-4 px-6 py-16 text-center">
           <PackageX className="size-10 text-brand-300" aria-hidden="true" />
           <div>
-            <h2 className="text-lg font-bold text-white">Nothing matches that</h2>
-            <p className="mt-1 text-sm text-brand-200/75">
-              Try a wider category, or clear the filters.
-            </p>
+            <h2 className="text-lg font-bold text-white">{t('shop.emptyTitle')}</h2>
+            <p className="mt-1 text-sm text-brand-200/75">{t('shop.emptySub')}</p>
           </div>
-          <button type="button" onClick={() => setParams(new URLSearchParams())} className="btn-ghost">
-            Clear filters
+          <button
+            type="button"
+            onClick={() => setParams(new URLSearchParams())}
+            className="btn-ghost"
+          >
+            {t('shop.clearFilters')}
           </button>
         </div>
       ) : (
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {visible.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={`${product.id}-${lang}`} product={product} />
           ))}
         </div>
       )}
 
       {visible.some(hasDiscount) && (
-        <p className="mt-8 text-xs text-brand-300/60">
-          Struck-through prices are the regular list price. Discounts are set per product in the
-          catalog.
-        </p>
+        <p className="mt-8 text-xs text-brand-300/60">{t('shop.discountNote')}</p>
       )}
     </div>
   )

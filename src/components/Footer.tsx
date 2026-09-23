@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { site } from '@/data/site'
+import { useLanguage } from '@/i18n/LanguageContext'
+import type { TranslationKey } from '@/i18n/en'
 import { categories } from '@/data/categories'
 import logo from '@/assets/logo.png'
 
@@ -29,13 +31,15 @@ const socials = [
 ]
 
 export function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="mt-24 border-t border-white/10 bg-brand-950">
       <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <img src={logo} alt={site.name} className="h-9 w-auto" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-brand-200/80">
-            {site.description}
+            {t('home.subtitle')}
           </p>
           <div className="mt-5 flex gap-2">
             {socials.map((social) => (
@@ -56,7 +60,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="text-sm font-bold tracking-wider text-white uppercase">Shop</h3>
+          <h3 className="text-sm font-bold tracking-wider text-white uppercase">{t('footer.shop')}</h3>
           <ul className="mt-4 space-y-2.5 text-sm">
             {categories.map((category) => (
               <li key={category.slug}>
@@ -64,7 +68,7 @@ export function Footer() {
                   to={`/shop?category=${category.slug}`}
                   className="text-brand-200/80 transition-colors hover:text-white"
                 >
-                  {category.name}
+                  {t(`categories.${category.slug}` as TranslationKey)}
                 </Link>
               </li>
             ))}
@@ -72,33 +76,33 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="text-sm font-bold tracking-wider text-white uppercase">Company</h3>
+          <h3 className="text-sm font-bold tracking-wider text-white uppercase">{t('footer.company')}</h3>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
               <Link to="/about" className="text-brand-200/80 hover:text-white">
-                About us
+                {t('footer.aboutUs')}
               </Link>
             </li>
             <li>
               <Link to="/contact" className="text-brand-200/80 hover:text-white">
-                Contact
+                {t('nav.contact')}
               </Link>
             </li>
             <li>
               <Link to="/shop" className="text-brand-200/80 hover:text-white">
-                All products
+                {t('footer.allProducts')}
               </Link>
             </li>
             <li>
               <a href={`https://wa.me/${site.whatsapp}`} className="text-brand-200/80 hover:text-white">
-                WhatsApp order
+                {t('footer.whatsappOrder')}
               </a>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-sm font-bold tracking-wider text-white uppercase">Reach us</h3>
+          <h3 className="text-sm font-bold tracking-wider text-white uppercase">{t('footer.reachUs')}</h3>
           <ul className="mt-4 space-y-3 text-sm text-brand-200/80">
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden="true" />
@@ -123,9 +127,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-brand-300/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
-          </p>
+          <p>{t('footer.rights', { year: new Date().getFullYear(), name: site.name })}</p>
           <p>{site.domain}</p>
         </div>
       </div>
