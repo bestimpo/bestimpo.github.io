@@ -12,6 +12,7 @@ import type { ProductTranslation } from '@/types'
  */
 export const productTranslationsBn: Record<string, ProductTranslation> = {
   'pulse-air-pro-anc-earbuds': {
+    specs: { Warranty: '১২ মাস' },
     name: 'পালস এয়ার প্রো ANC ইয়ারবাড',
     brand: 'বেস্টিম্পো অডিও',
     shortDescription:
@@ -27,6 +28,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     badge: 'সবচেয়ে বেশি বিক্রি',
   },
   'stratos-gt-smartwatch': {
+    specs: { Warranty: '১২ মাস' },
     name: 'স্ট্র্যাটোস জিটি স্মার্টওয়াচ',
     brand: 'বেস্টিম্পো ওয়্যার',
     shortDescription: '১.৪৩" AMOLED, ডুয়াল-ব্যান্ড জিপিএস আর স্বাভাবিক ব্যবহারে ১৪ দিন ব্যাকআপ।',
@@ -40,6 +42,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'voltcore-140w-gan-charger': {
+    specs: { Warranty: '২৪ মাস' },
     name: 'ভোল্টকোর ১৪০ ওয়াট GaN চার্জার',
     shortDescription: 'চারটি পোর্ট, ১৪০ ওয়াট PD 3.1, আর পকেটে রাখলে খেয়ালই থাকে না।',
     description:
@@ -53,6 +56,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     badge: 'আমাদের পছন্দ',
   },
   'nimbus-mesh-wifi-6e-2pack': {
+    specs: { Warranty: '২৪ মাস' },
     name: 'নিম্বাস মেশ ওয়াই-ফাই ৬E (২টি)',
     shortDescription: 'ট্রাই-ব্যান্ড ৬E মেশ, ৪,০০০ বর্গফুট জুড়ে কোথাও সিগন্যাল পড়ে না।',
     description:
@@ -65,6 +69,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'echofield-360-speaker': {
+    specs: { Warranty: '১২ মাস' },
     name: 'ইকোফিল্ড ৩৬০ স্পিকার',
     brand: 'বেস্টিম্পো অডিও',
     shortDescription: 'ঘরজুড়ে ৩৬০° সাউন্ড, ২৪ ঘণ্টা ব্যাকআপ, IP67 — পুল থেকে ছাদ পর্যন্ত।',
@@ -78,6 +83,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'sentry-cam-2k-indoor': {
+    specs: { Warranty: '১২ মাস' },
     name: 'সেন্ট্রি ক্যাম ২K ইনডোর',
     shortDescription: '২K ছবি, ডিভাইসেই ব্যক্তি শনাক্তকরণ, আর SD কার্ড স্লট — সাবস্ক্রিপশন লাগে না।',
     description:
@@ -91,6 +97,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     badge: 'অফার',
   },
   'traverse-27000-power-bank': {
+    specs: { Warranty: '১৮ মাস' },
     name: 'ট্রাভার্স ২৭০০০ পাওয়ার ব্যাংক',
     shortDescription: '২৭,০০০ mAh, ১০০ ওয়াট আউটপুট — ল্যাপটপ চার্জ করে, তবু বিমানে নেওয়া যায়।',
     description:
@@ -103,6 +110,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'lumen-strip-pro-rgbic': {
+    specs: { Warranty: '১২ মাস' },
     name: 'লুমেন স্ট্রিপ প্রো RGBIC ৫ মিটার',
     shortDescription: 'সেগমেন্ট-ভিত্তিক RGBIC, মিউজিক সিঙ্ক ভলিউম নয় — বিট ধরে চলে।',
     description:
@@ -116,6 +124,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     badge: '৪০% ছাড়',
   },
   'dockmaster-12-in-1-hub': {
+    specs: { Warranty: '২৪ মাস' },
     name: 'ডকমাস্টার ১২-ইন-১ হাব',
     shortDescription: 'একটি থান্ডারবোল্ট কেবলে ডুয়াল 4K60, ২.৫ GbE আর ১০০ ওয়াট পাসথ্রু।',
     description:
@@ -128,6 +137,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'flexcore-magsafe-stand': {
+    specs: { Warranty: '১৮ মাস' },
     name: 'ফ্লেক্সকোর ম্যাগনেটিক ৩-ইন-১ স্ট্যান্ড',
     brand: 'বেস্টিম্পো',
     shortDescription: 'ভাঁজ হয়ে ১২ মিমি, ফোন-ঘড়ি-বাড তিনটাই ফুল স্পিডে চার্জ।',
@@ -141,6 +151,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'aerocool-laptop-riser': {
+    specs: { Warranty: '২৪ মাস' },
     name: 'এয়ারোকুল ল্যাপটপ রাইজার',
     brand: 'বেস্টিম্পো',
     shortDescription: 'ছয়টি উচ্চতা, খোলা বাতাস চলাচল, আর জোরে টাইপ করলেও নড়ে না।',
@@ -154,6 +165,7 @@ export const productTranslationsBn: Record<string, ProductTranslation> = {
     ],
   },
   'clearline-usb4-cable-1m': {
+    specs: { Warranty: 'আজীবন' },
     name: 'ক্লিয়ারলাইন USB4 কেবল ১ মিটার',
     shortDescription: '৪০ Gbps, ২৪০ ওয়াট, 8K60 ভিডিও — একটাই কেবল, সন্দেহের জায়গা নেই।',
     description:

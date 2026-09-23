@@ -8,7 +8,7 @@ import type { Product } from '@/types'
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart()
-  const { t, lang, formatPrice, formatNumber } = useLanguage()
+  const { t, lang, formatPrice, formatNumber, formatDecimal } = useLanguage()
   const shown = localizeProduct(product, lang)
   const soldOut = product.stock <= 0
   const price = salePrice(product)
@@ -60,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
         {product.rating !== undefined && (
           <div className="mt-3 flex items-center gap-1.5 text-xs text-brand-200">
             <Star className="size-3.5 fill-accent-500 text-accent-500" aria-hidden="true" />
-            <span className="font-semibold text-white">{product.rating.toFixed(1)}</span>
+            <span className="font-semibold text-white">{formatDecimal(product.rating)}</span>
             <span className="text-brand-300/70">({formatNumber(product.reviewCount ?? 0)})</span>
           </div>
         )}

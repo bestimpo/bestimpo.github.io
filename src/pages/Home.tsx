@@ -19,7 +19,7 @@ const perks: { icon: typeof Truck; title: TranslationKey; copy: TranslationKey }
 ]
 
 export function Home() {
-  const { t, lang, formatPrice, formatNumber } = useLanguage()
+  const { t, lang, formatPrice, formatNumber, formatDecimal } = useLanguage()
 
   const featured = products.filter((product) => product.featured)
   const deals = products
@@ -89,7 +89,7 @@ export function Home() {
                 <dt className="text-xs tracking-wide text-brand-300 uppercase">
                   {t('home.statRating')}
                 </dt>
-                <dd className="font-display text-2xl font-bold text-white">4.6★</dd>
+                <dd className="font-display text-2xl font-bold text-white">{formatDecimal(4.6)}★</dd>
               </div>
             </dl>
           </div>

@@ -15,6 +15,8 @@ type LanguageContextValue = {
   /** Price in the active language's digits, e.g. "৳14,900" or "৳১৪,৯০০". */
   formatPrice: (amount: number) => string
   formatNumber: (value: number) => string
+  /** One-decimal values such as a 4.6 star rating. */
+  formatDecimal: (value: number) => string
   /** Spec keys are shared across products, so they translate through the dictionary. */
   specLabel: (key: string) => string
 }
@@ -54,12 +56,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     [lang],
   )
 
+  const decimalFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(localeFor(lang), {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      }),
+    [lang],
+  )
+
   const value: LanguageContextValue = {
     lang,
     setLang,
     t,
     formatPrice: useCallback((amount: number) => formatPriceRaw(amount, lang), [lang]),
     formatNumber: useCallback((value: number) => numberFormatter.format(value), [numberFormatter]),
+    formatDecimal: useCallback(
+      (value: number) => decimalFormatter.format(value),
+      [decimalFormatter],
+    ),
     specLabel: useCallback(
       (key: string) => {
         const specs = dictionaries[lang].specs as Record<string, string>

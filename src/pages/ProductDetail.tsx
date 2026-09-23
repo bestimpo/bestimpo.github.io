@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   ShoppingCart,
   Star,
+  Truck,
 } from 'lucide-react'
 import { ProductCard } from '@/components/ProductCard'
 import { ProductGallery } from '@/components/ProductGallery'
@@ -26,7 +27,7 @@ export function ProductDetail() {
   const { id } = useParams<{ id: string }>()
   const product = id ? productById.get(id) : undefined
   const { add } = useCart()
-  const { t, lang, formatPrice, formatNumber, specLabel } = useLanguage()
+  const { t, lang, formatPrice, formatNumber, formatDecimal, specLabel } = useLanguage()
   const [quantity, setQuantity] = useState(1)
 
   // Related-product links keep this component mounted, so the quantity has to
@@ -88,7 +89,7 @@ export function ProductDetail() {
             {product.rating !== undefined && (
               <span className="flex items-center gap-1.5 text-sm">
                 <Star className="size-4 fill-accent-500 text-accent-500" aria-hidden="true" />
-                <strong className="text-white">{product.rating.toFixed(1)}</strong>
+                <strong className="text-white">{formatDecimal(product.rating)}</strong>
                 <span className="text-brand-300">
                   ({t('common.reviews', { count: formatNumber(product.reviewCount ?? 0) })})
                 </span>
@@ -177,7 +178,7 @@ export function ProductDetail() {
           {/* Assurances */}
           <div className="mt-8 grid gap-4 border-t border-white/10 pt-6 sm:grid-cols-3">
             <p className="flex items-start gap-2.5 text-xs text-brand-200/80">
-              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden="true" />
+              <Truck className="mt-0.5 size-4 shrink-0 text-brand-400" aria-hidden="true" />
               {t('product.freeShippingOver', { amount: formatPrice(site.freeShippingThreshold) })}
             </p>
             <p className="flex items-start gap-2.5 text-xs text-brand-200/80">

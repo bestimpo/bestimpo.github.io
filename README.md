@@ -16,6 +16,8 @@ Pages, free to host and impossible to take down with a bad deploy.
   `src/data/site.ts`.
 - **Orders** go through EmailJS to your inbox. No card is charged on the site; you confirm payment
   and delivery by reply. Unconfigured keys are stated on the page, with a mail-client fallback.
+- **Two languages.** English and Bengali (বাংলা), switched from the header and remembered per
+  visitor. Prices follow the language: `৳14,900` in English, `৳১৪,৯০০` in Bengali.
 - **Deploys** happen on push to `main` via GitHub Actions. Routing is hash-based, so deep links
   survive a refresh on Pages.
 - 7 pages: home, shop (search, category, sort, stock filters), product detail, checkout, about,
@@ -55,9 +57,13 @@ Everything about the shop's stock is in **`src/data/products.ts`**. One entry pe
   name: 'Pulse Air Pro ANC Earbuds',
   brand: 'Bestimpo Audio',
   category: 'audio',                  // must be one of the slugs in src/data/categories.ts
-  price: 129,                         // full list price
+  price: 15900,                       // full list price, in BDT
   discountPercent: 30,                // omit for no sale — sale price is computed for you
-  images: ['products/pulse-air-pro.svg'],
+  images: [                           // first one is the card image; the rest
+    'products/pulse-air-pro.svg',     // become arrows + thumbnails + zoom on
+    'products/pulse-air-pro-detail.svg',  // the product page
+    'products/pulse-air-pro-box.svg',
+  ],
   shortDescription: 'One line for the product card.',
   description: 'A paragraph for the product page.',
   highlights: ['Bullet 1', 'Bullet 2'],
@@ -75,9 +81,16 @@ Everything about the shop's stock is in **`src/data/products.ts`**. One entry pe
 discounted price everywhere else — cart and order email included. TypeScript fails the build if a
 field is missing or a category slug is wrong, so a typo cannot reach the live site.
 
-**Images.** Drop the file in `public/products/` and reference it as `products/your-file.jpg`.
-A full `https://…` URL also works. The current files are generated placeholders — replace them with
-real photos. Landscape 4:3 looks best on the cards.
+**Images.** Drop files in `public/products/` and reference them as `products/your-file.jpg`.
+Full `https://…` URLs also work. List as many as you like: the first is the card image, and the
+product page turns the rest into a gallery with prev/next arrows, a thumbnail strip, a counter,
+arrow-key navigation and a click-to-zoom full-size view. One image is fine too — the gallery
+controls simply do not appear. The current files are generated placeholders (three views per
+product); replace them with real photos.
+
+**Currency.** Prices are plain numbers in BDT — write `15900`, not `"৳15,900"`. Grouping, digits
+and the symbol are applied for you. To use a different currency, change `site.currency.symbol` in
+`src/data/site.ts` and the locales in `src/i18n/index.ts`.
 
 Other things you may want to edit:
 
@@ -92,6 +105,39 @@ Currency lives in `site.currency` — change `symbol`, `code` and `locale` toget
 USD to anything else.
 
 ---
+
+## Languages (English + বাংলা)
+
+The header has an **EN / বাং** switch. The choice is stored per visitor in `localStorage` and sets
+`<html lang>`, which also swaps in the Noto Sans Bengali webfont.
+
+| What | Where |
+| ---- | ----- |
+| Interface text (buttons, labels, headings, forms) | `src/i18n/en.ts` and `src/i18n/bn.ts` |
+| Product names, descriptions, highlights | `src/data/products.bn.ts`, keyed by product `id` |
+| Category names and blurbs | the `categories` / `categoryBlurbs` sections of the dictionaries |
+| Spec labels (Battery, Warranty, …) | the `specs` section of the dictionaries |
+
+**Adding a UI string:** add the key to `en.ts`, then to `bn.ts`. `bn.ts` is typed against the
+English file, so a missing key is a build error rather than a silent gap. Use it in a component
+with `const { t } = useLanguage()` and `t('section.key')`. Placeholders interpolate:
+`t('common.onlyLeft', { count: 3 })`.
+
+**Translating a product:** add an entry in `src/data/products.bn.ts` under the product's `id`.
+Every field is optional and falls back field by field, so you can list a product in English today
+and translate it later without anything breaking:
+
+```ts
+'my-product-id': {
+  name: 'পণ্যের নাম',
+  shortDescription: 'কার্ডে যে এক লাইন দেখাবে।',
+  // description, highlights, brand, badge, specs — all optional
+},
+```
+
+Prices need no translation: `৳14,900` in English becomes `৳১৪,৯০০` in Bengali automatically, since
+`bn-BD` switches both the digits and the grouping to lakh style. Search matches either language, so
+a Bengali term still finds an English-only product.
 
 ## Orders by email (EmailJS)
 
@@ -206,14 +252,20 @@ src/
 ├── assets/logo.png      the logo
 ├── data/
 │   ├── products.ts      THE CATALOG — edit this
+│   ├── products.bn.ts   Bengali product text, keyed by id
 │   ├── categories.ts    category shelves
-│   └── site.ts          shop details + EmailJS config
+│   └── site.ts          shop details, currency + EmailJS config
+├── i18n/
+│   ├── en.ts            English UI strings (source of truth)
+│   ├── bn.ts            Bengali UI strings (typed against en.ts)
+│   ├── product.ts       merges Bengali product text over English
+│   └── LanguageContext.tsx  active language, t(), price formatting
 ├── lib/
 │   ├── format.ts        price formatting, discount maths, asset URLs
 │   ├── email.ts         EmailJS order + contact senders, mailto fallback
 │   └── useLocalStorage.ts
 ├── context/CartContext.tsx   cart state, persisted to localStorage
-├── components/          Navbar, Footer, ProductCard, CartDrawer, Reveal…
+├── components/          Navbar, Footer, ProductCard, ProductGallery, CartDrawer…
 └── pages/               Home, Shop, ProductDetail, Checkout, About, Contact, NotFound
 ```
 

@@ -13,7 +13,7 @@ type Props = {
 }
 
 export function ProductGallery({ images, alt, resetKey, overlay }: Props) {
-  const { t } = useLanguage()
+  const { t, formatNumber } = useLanguage()
   const [index, setIndex] = useState(0)
   const [zoomed, setZoomed] = useState(false)
 
@@ -96,7 +96,7 @@ export function ProductGallery({ images, alt, resetKey, overlay }: Props) {
               <ChevronRight className="size-5" aria-hidden="true" />
             </button>
             <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-brand-950/75 px-3 py-1 text-xs font-semibold text-brand-100 backdrop-blur">
-              {t('gallery.counter', { current: index + 1, total })}
+              {t('gallery.counter', { current: formatNumber(index + 1), total: formatNumber(total) })}
             </span>
           </>
         )}
@@ -173,7 +173,7 @@ export function ProductGallery({ images, alt, resetKey, overlay }: Props) {
                 <ChevronRight className="size-6" aria-hidden="true" />
               </button>
               <span className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-white">
-                {t('gallery.counter', { current: index + 1, total })}
+                {t('gallery.counter', { current: formatNumber(index + 1), total: formatNumber(total) })}
               </span>
             </>
           )}
